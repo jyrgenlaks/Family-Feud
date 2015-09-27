@@ -1,0 +1,16 @@
+﻿body {
+    font-family: 'Bebas Neue', sans-serif;
+    background-image:url("img/Background.png");
+    color: cadetblue;
+}
+
+.vastus {
+    float:left;
+    border: 1px solid;
+    padding: 2px;
+    margin: 5px;
+}
+
+#video {
+    display:none;
+}
