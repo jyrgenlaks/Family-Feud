@@ -26,17 +26,25 @@ function playSound(soundType:String) {
 
 function animateTurnToText(ctx: CanvasRenderingContext2D, id: Number) {
     var animation: HTMLVideoElement = media.vid["anim" + id];
-    var finish: HTMLImageElement = media.img[id + "-1"];
+    //var finish: HTMLImageElement = media.img[id + "-1"];
 
-    setInterval(() => {
+    var startTime = null;
+
+    playSound("clang");
+    animation.play();
+
+    // Update for 0.6 seconds
+    function step(timestamp: any) {
+        if (!startTime) {
+            startTime = timestamp;
+        }
+        var progress = timestamp - startTime;
         ctx.drawImage(animation, 0, 0);
-    }, 16 );
+        if (progress < 600) {
+            window.requestAnimationFrame(step);
+        }
+    }
     
-    playSound("turn");
-    // after animation replace video with static element
-    setTimeout(() => {
-        ctx.drawImage(finish, 0, 0);
-    }, 600);
 
 
 }
