@@ -15,7 +15,29 @@ function editCanvas(canvas: HTMLCanvasElement, id:Number) {
     ctx.fillStyle = "white";
     ctx.fillText("Hello world", 10, 50);
 
-    ctx.drawImage(media.img[id + '-0'], 0, 0);
+    var drawElement: HTMLVideoElement = media.vid["anim" + id];
+ 
+    //setTimeout(animateTurnToText(ctx, id), 5000);
+}
+
+function playSound(soundType:String) {
+    console.log("Implement playSound for " + soundType);
+};
+
+function animateTurnToText(ctx: CanvasRenderingContext2D, id: Number) {
+    var animation: HTMLVideoElement = media.vid["anim" + id];
+    var finish: HTMLImageElement = media.img[id + "-1"];
+
+    setInterval(() => {
+        ctx.drawImage(animation, 0, 0);
+    }, 16 );
+    
+    playSound("turn");
+    // after animation replace video with static element
+    setTimeout(() => {
+        ctx.drawImage(finish, 0, 0);
+    }, 600);
+
 
 }
 
@@ -35,12 +57,13 @@ window.onload = () => {
     mapClassToId(media.img, "img");
     
     
-    // initializze canvases with video sizes
-    _.forEach(canvases, (canvas:HTMLCanvasElement, index:Number) => {
-        canvas.width = media.vid["anim" + index].videoWidth;
-        canvas.height = media.vid["anim" + index].videoHeigth;
+    // initialiže canvases with video sizes
+    var index = 0;
+    _.forEach(canvases, (canvas: HTMLCanvasElement) => {
+        index += 1;
         editCanvas(canvas, index);
-    }
+        
+    });
     
-    
+
 };

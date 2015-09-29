@@ -5,12 +5,30 @@
 }
 
 .vastus {
+    position: absolute;
+    left: 0;
+    top: 0;
     float:left;
     border: 1px solid;
-    padding: 2px;
-    margin: 5px;
+}
+#c1 {
+    z-index: 0;
+}
+
+#c2 {
+    z-index: 1;
+}
+#c3 {
+    z-index: 2;
+}
+#c4 {
+    z-index: 3;
+}
+
+#vastused {
+    position: relative;
 }
 
 #video {
-    display:none;
+   
 }

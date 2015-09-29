@@ -10,7 +10,24 @@ function editCanvas(canvas, id) {
     ctx.font = "56px Bebas Neue";
     ctx.fillStyle = "white";
     ctx.fillText("Hello world", 10, 50);
-    ctx.drawImage(media.img[id + '-0'], 0, 0);
+    var drawElement = media.vid["anim" + id];
+    //setTimeout(animateTurnToText(ctx, id), 5000);
+}
+function playSound(soundType) {
+    console.log("Implement playSound for " + soundType);
+}
+;
+function animateTurnToText(ctx, id) {
+    var animation = media.vid["anim" + id];
+    var finish = media.img[id + "-1"];
+    setInterval(function () {
+        ctx.drawImage(animation, 0, 0);
+    }, 16);
+    playSound("turn");
+    // after animation replace video with static element
+    setTimeout(function () {
+        ctx.drawImage(finish, 0, 0);
+    }, 600);
 }
 function mapClassToId(map, classname) {
     var temp = document.getElementsByClassName(classname);
@@ -23,10 +40,10 @@ window.onload = function () {
     // map media to their ids
     mapClassToId(media.vid, "vid");
     mapClassToId(media.img, "img");
-    // initializze canvases with video sizes
-    _.forEach(canvases, function (canvas, index) {
-        canvas.width = media.vid["anim" + index].videoWidth;
-        canvas.height = media.vid["anim" + index].videoHeigth;
+    // initialiže canvases with video sizes
+    var index = 0;
+    _.forEach(canvases, function (canvas) {
+        index += 1;
         editCanvas(canvas, index);
     });
 };
