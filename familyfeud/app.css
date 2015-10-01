@@ -4,23 +4,35 @@
     color: cadetblue;
 }
 
-.vastus {
+.vid {
     position: absolute;
     left: 0;
     top: 0;
     float:left;
 }
-#c1 {
+.cross {
+    display: none;
+    z-index: 10;
+}
+#vastus {
+    font-size:20em;
+    position: absolute;
+    left: 0;
+    top: 0;
+    float:left;
+    z-index: 5;
+}
+#anim1 {
     z-index: 0;
 }
 
-#c2 {
+#anim2 {
     z-index: 1;
 }
-#c3 {
+#anim3 {
     z-index: 2;
 }
-#c4 {
+#anim4 {
     z-index: 3;
 }
 

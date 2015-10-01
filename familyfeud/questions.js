@@ -18,7 +18,7 @@
 
 // questions for rounds
 var questions_rounds = [
-	'Name something that one can have for breakfast',
+	'wjwjwjwjwjwkw',
 	'Name an animal species that is kept as a pet',
 	'Name something that sticks to a wall'
 ];
@@ -27,23 +27,30 @@ var questions_rounds = [
 // format: dimension 1 = round, dimension 2 = question, dimension 3 = [answer, points]
 var answers_rounds = [
 	[
-		['Cereals', 49],
-		['Coffee', 22],
-		['Bread', 15],
-		['Tea', 7],
-		['Hot chocolate', 4],
-		['Fresh fruits', 3]
+		['M. Reemann',32],
+		['T. Jürgenstein', 25],
+		['E. Paabo', 8],
+		['P. Beier', 7]
 	], [
-		['Dog', 50],
-		['Cat', 36],
-		['Gold Fish', 7],
-		['Parrot', 4],
-		['Guinea pig', 3]
+		['M. Jõgiste', 16],
+		['M. Piirimäe', 11],
+		['E. Timak', 10],
+		['L. Astover', 9]
 	], [
-		['Poster', 34],
-		['Sticker', 29],
-		['Bubble gum', 19],
-		['Hot glue', 10]
+		['U. Saar', 23],
+		['Ü. Keerberg', 20],
+		['A. Pettai', 14],
+		['H. Köhler', 11]
+	], [
+		['K. Punga', 44],
+		['O. Titova', 8],
+		['J. Paaver', 7],
+		['A. Saarva', 6]
+	], [
+		['H. Tering', 21],
+		['H. Kiisel', 18],
+		['L. Tepp', 11],
+		['T. Pluum', 10]
 	]
 ];
 
