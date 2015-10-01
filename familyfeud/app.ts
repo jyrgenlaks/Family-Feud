@@ -109,14 +109,11 @@ function resetToNewRound() {
 
     var reset = document.getElementById("reset");
     reset.currentTime = 0;
-    console.log("reset time: " + reset.currentTime);
     reset.style.display = "block";
 
     _.forEach(videos, (video:HTMLVideoElement) => {
         video.style.display = "none";
-        console.log("video time: " + video.currentTime);
         video.currentTime = 0;
-        console.log("video time: " + video.currentTime);
     });
 
     reset.play();
@@ -127,7 +124,6 @@ function resetToNewRound() {
             video.style.display = "block";
         });
         reset.style.display = "none";
-        console.log("reset time: " + reset.currentTime);
         reset.currentTime = 0;
         
     }, 1000);
@@ -183,7 +179,7 @@ function turnText(boxId: number) {
         setTimeout(() => {
             // add the score to the teams current score
             if (curTeam !== -1) {
-                curTeamScore[curTeam] += answersRounds[curRound][boxId][1w];
+                curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
             }
 
             ctx.font = "200px Bebas Neue";

@@ -95,13 +95,10 @@ function resetToNewRound() {
     ctx.clearRect(0, 0, 1920, 1080);
     var reset = document.getElementById("reset");
     reset.currentTime = 0;
-    console.log("reset time: " + reset.currentTime);
     reset.style.display = "block";
     _.forEach(videos, function (video) {
         video.style.display = "none";
-        console.log("video time: " + video.currentTime);
         video.currentTime = 0;
-        console.log("video time: " + video.currentTime);
     });
     reset.play();
     drawLowerText(0, 0);
@@ -110,7 +107,6 @@ function resetToNewRound() {
             video.style.display = "block";
         });
         reset.style.display = "none";
-        console.log("reset time: " + reset.currentTime);
         reset.currentTime = 0;
     }, 1000);
     for (var i = 0; i < shown.length; ++i) {
@@ -154,8 +150,6 @@ function turnText(boxId) {
         setTimeout(function () {
             if (curTeam !== -1) {
                 curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
-                w;
-                ;
             }
             ctx.font = "200px Bebas Neue";
             ctx.fillStyle = "white";
