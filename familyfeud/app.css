@@ -4,23 +4,40 @@
     color: cadetblue;
 }
 
-.vastus {
+
+
+
+.vid {
     position: absolute;
     left: 0;
     top: 0;
     float:left;
 }
-#c1 {
+.hidden {
+     display: none;
+}
+.cross {
+    z-index: 10;
+}
+#vastus {
+    font-size:20em;
+    position: absolute;
+    left: 0;
+    top: 0;
+    float:left;
+    z-index: 5;
+}
+#anim1 {
     z-index: 0;
 }
 
-#c2 {
+#anim2 {
     z-index: 1;
 }
-#c3 {
+#anim3 {
     z-index: 2;
 }
-#c4 {
+#anim4 {
     z-index: 3;
 }
 
@@ -28,6 +45,22 @@
     position: relative;
 }
 
-#video {
-   
+#vastused div{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#logo {
+    animation: logo-animation 15s infinite;
+    transform: translateY(40px);
+    transform: translateX(10px);
+}
+
+@keyframes logo-animation {
+
+  50% {
+    transform: translateY(-20px);
+    transform: translateX(20px);
+    transform: scale(1.08)
+  }
 }
