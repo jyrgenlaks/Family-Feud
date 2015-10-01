@@ -1,15 +1,13 @@
-﻿/// <reference path="Scripts\typings\lodash\lodash.d.ts" />
-
+/// <reference path="Scripts\typings\lodash\lodash.d.ts" />
 var canvas;
-var ctx: CanvasRenderingContext2D;
+var ctx;
 var videos;
 var answers = [
-    "U. Saar", 42, 
+    "U. Saar", 42,
     "T. Jürgenstein", 24,
-    "U. Saar", 10, 
+    "U. Saar", 10,
     "H. Kiisel", 5
 ];
-
 var answersRounds1 = [
     [
         ['M. Reemann', 32],
@@ -38,8 +36,7 @@ var answersRounds1 = [
         ['T. Pluum', 10]
     ]
 ];
-var answersRounds = 
-[
+var answersRounds = [
     [
         ["JavaScript", 99],
         ["Java", 70],
@@ -70,75 +67,58 @@ var answersRounds =
         ["Oleneb", 30],
         ["Ei tea", 0]
     ]
-    ];
-
-//TODO: skoor teisele tiimile
-//TODO: skoor laiemaks
-//TODO: skoor 
-
-var shown = [
-    false, false, false, false        
 ];
-
-var boxLocations: Array<number> = [
-//  X   Y
+var shown = [
+    false, false, false, false
+];
+var boxLocations = [
     80, 230,
     80, 535,
     1020, 230,
     1020, 535
 ];
-var numLocations: Array<number> = [
-//  X   Y
+var numLocations = [
     755, 230,
     755, 535,
     1720, 230,
     1720, 535
 ];
-
-var teamScore: Array<number> = [0, 0];
-var curTeamScore: Array<number> = [0, 0];
-var curTeam: number;
+var teamScore = [0, 0];
+var curTeamScore = [0, 0];
+var curTeam;
 var curRound = 0;
-
 function resetToNewRound() {
     for (var i = 0; i < curTeamScore.length; ++i) {
         teamScore[i] += curTeamScore[i];
         curTeamScore[i] = 0;
     }
     ctx.clearRect(0, 0, 1920, 1080);
-
     var reset = document.getElementById("reset");
     reset.currentTime = 0;
     console.log("reset time: " + reset.currentTime);
     reset.style.display = "block";
-
-    _.forEach(videos, (video:HTMLVideoElement) => {
+    _.forEach(videos, function (video) {
         video.style.display = "none";
         console.log("video time: " + video.currentTime);
         video.currentTime = 0;
         console.log("video time: " + video.currentTime);
     });
-
     reset.play();
     drawLowerText(0, 0);
-
-    setTimeout(() => {
-        _.forEach(videos, (video: HTMLVideoElement) => {
+    setTimeout(function () {
+        _.forEach(videos, function (video) {
             video.style.display = "block";
         });
         reset.style.display = "none";
         console.log("reset time: " + reset.currentTime);
         reset.currentTime = 0;
-        
     }, 1000);
-
     for (var i = 0; i < shown.length; ++i) {
         shown[i] = false;
     }
     curRound += 1;
 }
-
-function drawLowerText(score1:number, score2:number) {
+function drawLowerText(score1, score2) {
     ctx.font = "400px Bebas Neue ";
     var offsetFromCenter = 400;
     ctx.clearRect(canvas.width / 2 - offsetFromCenter, 1010 - 400, offsetFromCenter * 2 + 400, 450);
@@ -146,121 +126,106 @@ function drawLowerText(score1:number, score2:number) {
     ctx.fillText(score2, canvas.width / 2 + 200, 1010);
 }
 function drawFinish() {
-
     ctx.clearRect(0, 0, 1920, 1080);
-    _.forEach(videos, (video: HTMLVideoElement) => {
+    _.forEach(videos, function (video) {
         video.style.display = "none";
         video.currentTime = 0;
     });
-
     var reset = document.getElementById("reset");
     reset.currentTime = 0;
     reset.style.display = "block";
-
     reset.play();
-
-    setTimeout(() => {
+    setTimeout(function () {
         reset.style.display = "none";
         reset.currentTime = 0;
-
     }, 350);
-
     ctx.font = "600px Bebas Neue ";
     var offsetFromCenter = 500;
     ctx.clearRect(canvas.width / 2 - offsetFromCenter, 500 - 400, offsetFromCenter * 2 + 400, 450);
     ctx.fillText(teamScore[0], canvas.width / 2 - offsetFromCenter, 500);
     ctx.fillText(teamScore[1], canvas.width / 2 + offsetFromCenter, 500);
 }
-
-function turnText(boxId: number) {
-   
+function turnText(boxId) {
     if (curRound === answersRounds.length) {
         drawFinish();
-    }else if (!shown[boxId]) {
-       
+    }
+    else if (!shown[boxId]) {
         videos[boxId].play();
-
-        setTimeout(() => {
-            // add the score to the teams current score
+        setTimeout(function () {
             if (curTeam !== -1) {
-                curTeamScore[curTeam] += answersRounds[curRound][boxId][1w];
+                curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
+                w;
+                ;
             }
-
             ctx.font = "200px Bebas Neue";
             ctx.fillStyle = "white";
             ctx.shadowColor = "black";
             ctx.shadowBlur = 10;
             ctx.shadowOffsetX = 5;
             ctx.shadowOffsetY = 5;
-
-            // clear previous fill
             ctx.clearRect(boxLocations[boxId * 2 + 0], boxLocations[boxId * 2 + 1] - 300, 850, 350);
- 
-            // draw name
             ctx.fillText(answersRounds[curRound][boxId][0], boxLocations[boxId * 2 + 0], boxLocations[boxId * 2 + 1], 650);
-            // draw the score the name gives
             ctx.fillText(answersRounds[curRound][boxId][1], numLocations[boxId * 2], numLocations[boxId * 2 + 1]);
-
             drawLowerText(curTeamScore[0], curTeamScore[1]);
-
         }, 450);
     }
     shown[boxId] = true;
-
 }
-
-function wrongAnswer(wrongNum: number) {
+function wrongAnswer(wrongNum) {
     var cross = document.getElementById("cross" + wrongNum);
-
     cross.style.display = "block";
     cross.play();
-    setTimeout(() => {
+    setTimeout(function () {
         cross.style.display = "none";
     }, 1000);
 }
-function gotAnswer(team: number) {
-    // TODO: when otehr team guesses the maximum, they get all the score!
+function gotAnswer(team) {
     curTeam = team;
 }
-
 function unloadScrollBars() {
-    document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+    document.documentElement.style.overflow = 'hidden';
 }
-
-window.onload = () => {
+window.onload = function () {
     unloadScrollBars();
     canvas = document.getElementById('vastus');
     ctx = canvas.getContext("2d");
     videos = document.getElementsByClassName('anim');
-    
 };
-
-window.addEventListener('mousedown', function(event) {
+window.addEventListener('mousedown', function (event) {
     console.log("X: " + event.clientX + " Y: " + event.clientY);
 });
-
-window.addEventListener("keypress", function (event: Event) {
-    if (event.charCode == 49) { // 1
+window.addEventListener("keypress", function (event) {
+    if (event.charCode == 49) {
         turnText(0);
-    } else if (event.charCode == 50) { // 2kwkwjw
+    }
+    else if (event.charCode == 50) {
         turnText(1);
-    } else if (event.charCode == 51) { // 3
+    }
+    else if (event.charCode == 51) {
         turnText(2);
-    } else if (event.charCode == 52) { // 4
+    }
+    else if (event.charCode == 52) {
         turnText(3);
-    } else if (event.charCode == 53) { // 5
+    }
+    else if (event.charCode == 53) {
         wrongAnswer(1);
-    } else if (event.charCode == 54) { // 6
+    }
+    else if (event.charCode == 54) {
         wrongAnswer(2);
-    } else if (event.charCode == 55) { // 7
+    }
+    else if (event.charCode == 55) {
         wrongAnswer(3);
-    } else if (event.charCode == 106) { // j
+    }
+    else if (event.charCode == 106) {
         gotAnswer(0);
-    } else if (event.charCode == 107) { // k
+    }
+    else if (event.charCode == 107) {
         gotAnswer(1);
-    } else if (event.charCode == 114) { // r
+    }
+    else if (event.charCode == 114) {
         resetToNewRound();
-    } else {
-        console.log(event.charCode);        
+    }
+    else {
+        console.log(event.charCode);
     }
 });

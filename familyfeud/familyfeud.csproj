@@ -46,6 +46,7 @@
   <ItemGroup>
     <Folder Include="audio\" />
     <Folder Include="img\" />
+    <Folder Include="vidaud\" />
     <Folder Include="video\" />
   </ItemGroup>
   <PropertyGroup>
