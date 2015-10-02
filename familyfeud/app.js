@@ -2,7 +2,7 @@
 var canvas;
 var ctx;
 var videos;
-var answersRounds1 = [
+var answersRounds = [
     [
         ['M. Reemann', 32],
         ['T. Jürgenstein', 25],
@@ -30,7 +30,7 @@ var answersRounds1 = [
         ['T. Pluum', 10]
     ]
 ];
-var answersRounds = [
+var answersRounds1 = [
     [
         ["JavaScript", 99],
         ["Java", 70],
@@ -62,19 +62,20 @@ var answersRounds = [
         ["Ei tea", 0]
     ]
 ];
-//TODO: re mux with new audio
 var turnedBox = [
     false, false, false, false
 ];
+function pad(num, size) {
+    var s = "0000000000" + num;
+    return s.substr(s.length - size);
+}
 var boxLocations = [
-    //  X   Y
     80, 230,
     80, 535,
     1020, 230,
     1020, 535
 ];
 var numLocations = [
-    //  X   Y
     755, 230,
     755, 535,
     1720, 230,
@@ -91,6 +92,7 @@ function resetToNewRound() {
         curTeamScore[i] = 0;
         curWrongAnswer[i] = 0;
     }
+    noAdd = false;
     ctx.clearRect(0, 0, 1920, 1080);
     var reset = document.getElementById("reset");
     reset.currentTime = 0;
@@ -116,7 +118,7 @@ function resetToNewRound() {
 function pointsSteal() {
     curTeamScore[curTeam] += curTeamScore[Math.abs(curTeam - 1)];
     curTeamScore[Math.abs(curTeam - 1)] = 0;
-    resetToNewRound();
+    drawLowerText(curTeamScore[0], curTeamScore[1]);
 }
 function drawLowerText(score1, score2) {
     ctx.font = "400px Bebas Neue ";
@@ -127,9 +129,6 @@ function drawLowerText(score1, score2) {
 }
 var finished = false;
 function drawFinish() {
-    if (finished) {
-        return;
-    }
     finished = true;
     ctx.clearRect(0, 0, 1920, 1080);
     animate("ending", 1000);
@@ -138,7 +137,7 @@ function drawFinish() {
         video.currentTime = 0;
     });
     ctx.font = "600px Bebas Neue ";
-    ctx.fillText(teamScore[0] + "   " + teamScore[1], 100, 800, 1800);
+    ctx.fillText(pad(teamScore[0], 3) + "   " + pad(teamScore[1], 3), 100, 800, 1800);
 }
 function animate(element, duration) {
     var animation = document.getElementById(element);
@@ -154,12 +153,9 @@ function start() {
     if (startUsed === true) {
         return;
     }
-    // Hide logo
     var logo = document.getElementById("logo");
     logo.style.display = "none";
-    // Show appearing boxes
     animate("beginning", 1000);
-    // Put boxes on screen
     setTimeout(function () {
         _.forEach(videos, function (video) {
             video.style.display = "block";
@@ -167,6 +163,7 @@ function start() {
         });
     }, 700);
 }
+var noAdd = false;
 function turnText(boxId) {
     if (curRound >= answersRounds.length) {
         drawFinish();
@@ -174,8 +171,7 @@ function turnText(boxId) {
     else if (!turnedBox[boxId]) {
         videos[boxId].play();
         setTimeout(function () {
-            // add the score to the teams current score
-            if (curTeam !== -1) {
+            if (curTeam !== -1 && !noAdd) {
                 curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
             }
             ctx.font = "200px Bebas Neue";
@@ -184,11 +180,8 @@ function turnText(boxId) {
             ctx.shadowBlur = 10;
             ctx.shadowOffsetX = 5;
             ctx.shadowOffsetY = 5;
-            // clear previous fill
             ctx.clearRect(boxLocations[boxId * 2 + 0], boxLocations[boxId * 2 + 1] - 300, 850, 350);
-            // draw name
             ctx.fillText(answersRounds[curRound][boxId][0], boxLocations[boxId * 2 + 0], boxLocations[boxId * 2 + 1], 650);
-            // draw the score the name gives
             ctx.fillText(answersRounds[curRound][boxId][1], numLocations[boxId * 2], numLocations[boxId * 2 + 1]);
             drawLowerText(curTeamScore[0], curTeamScore[1]);
         }, 450);
@@ -216,26 +209,19 @@ function wrongAnswerTeams() {
     }
 }
 function selectTeam(team) {
-    // TODO: when otehr team guesses the maximum, they get all the score!
     curTeam = team;
 }
 function switchTeam() {
-    if (curTeam === 1) {
-        curTeam = 0;
-    }
-    else {
-        curTeam = 1;
-    }
+    curTeam = Math.abs(curTeam - 1);
 }
 function unloadScrollBars() {
-    document.documentElement.style.overflow = 'hidden'; // firefox, chrome
+    document.documentElement.style.overflow = 'hidden';
 }
 window.onload = function () {
     unloadScrollBars();
     canvas = document.getElementById('vastus');
     ctx = canvas.getContext("2d");
     videos = document.getElementsByClassName('anim');
-    // Fix for some weird bug that sometimes the font wasn't correct in the beginning
 };
 window.addEventListener('mousedown', function (event) {
     console.log("X: " + event.clientX + " Y: " + event.clientY);
@@ -280,8 +266,10 @@ window.addEventListener("keypress", function (event) {
     else if (event.charCode == 105) {
         pointsSteal();
     }
+    else if (event.charCode == 48) {
+        noAdd = true;
+    }
     else {
         console.log(event.charCode);
     }
 });
-//# sourceMappingURL=app.js.map

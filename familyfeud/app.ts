@@ -4,7 +4,7 @@ var canvas;
 var ctx: CanvasRenderingContext2D;
 var videos;
 
-var answersRounds1 = [
+var answersRounds = [
     [
         ['M. Reemann', 32],
         ['T. Jürgenstein', 25],
@@ -32,7 +32,7 @@ var answersRounds1 = [
         ['T. Pluum', 10]
     ]
 ];
-var answersRounds = 
+var answersRounds1 = 
 [
     [
         ["JavaScript", 99],
@@ -72,6 +72,11 @@ var turnedBox = [
     false, false, false, false        
 ];
 
+function pad(num, size) {
+    var s = "0000000000" + num;
+    return s.substr(s.length - size);
+}
+
 var boxLocations: Array<number> = [
 //  X   Y
     80, 230,
@@ -99,6 +104,7 @@ function resetToNewRound() {
         curTeamScore[i] = 0;
         curWrongAnswer[i] = 0;
     }
+    noAdd = false;
     ctx.clearRect(0, 0, 1920, 1080);
 
     var reset = document.getElementById("reset");
@@ -131,7 +137,7 @@ function resetToNewRound() {
 function pointsSteal() {
     curTeamScore[curTeam] += curTeamScore[Math.abs(curTeam - 1)];
     curTeamScore[Math.abs(curTeam - 1)] = 0;
-    resetToNewRound();
+    drawLowerText(curTeamScore[0], curTeamScore[1]);
 }
 
 function drawLowerText(score1:number, score2:number) {
@@ -141,11 +147,12 @@ function drawLowerText(score1:number, score2:number) {
     ctx.fillText(score1, 250, 1010);
     ctx.fillText(score2, 1310 , 1010);
 }
+
 var finished = false;
 function drawFinish() {
-    if (finished) {
-        return;
-    }
+    //if (finished) {
+    //    return;
+    //}
     finished = true;
     ctx.clearRect(0, 0, 1920, 1080);
 
@@ -155,13 +162,10 @@ function drawFinish() {
         video.currentTime = 0;
     });
 
-
     ctx.font = "600px Bebas Neue ";
     
-    ctx.fillText(teamScore[0] + "   " + teamScore[1], 100, 800, 1800);
+    ctx.fillText(pad(teamScore[0], 3) + "   " + pad(teamScore[1], 3), 100, 800, 1800);
 }
-
-
 
 function animate(element: string, duration) {
     var animation = document.getElementById(element);
@@ -196,19 +200,17 @@ function start() {
     }, 700);
 }
 
+var noAdd = false;
 function turnText(boxId: number) {
    
     if (curRound >= answersRounds.length) {
         drawFinish();
     }else if (!turnedBox[boxId]) {
-       
         videos[boxId].play();
-
         
-
         setTimeout(() => {
             // add the score to the teams current score
-            if (curTeam !== -1) {
+            if (curTeam !== -1 && !noAdd) {
                 curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
             }
 
@@ -258,18 +260,11 @@ function wrongAnswerTeams() {
     }
 }
 function selectTeam(team: number) {
-    // TODO: when otehr team guesses the maximum, they get all the score!
     curTeam = team;
 }
 function switchTeam() {
-    if (curTeam === 1) {
-        curTeam = 0;
-    } else {
-        curTeam = 1;
-    }
-
+    curTeam = Math.abs(curTeam - 1);
 }
-
 function unloadScrollBars() {
     document.documentElement.style.overflow = 'hidden';  // firefox, chrome
 }
@@ -278,11 +273,7 @@ window.onload = () => {
     unloadScrollBars();
     canvas = document.getElementById('vastus');
     ctx = canvas.getContext("2d");
-    videos = document.getElementsByClassName('anim');
-
-    // Fix for some weird bug that sometimes the font wasn't correct in the beginning
-
-    
+    videos = document.getElementsByClassName('anim');   
 };
 
 window.addEventListener('mousedown', function(event) {
@@ -316,6 +307,8 @@ window.addEventListener("keypress", function (event: Event) {
         start();
     } else if (event.charCode == 105) { // i
         pointsSteal();
+    } else if (event.charCode == 48) { // 0
+        noAdd = true;
     } else {
         console.log(event.charCode);        
     }
