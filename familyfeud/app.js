@@ -92,6 +92,10 @@ function resetToNewRound() {
         curTeamScore[i] = 0;
         curWrongAnswer[i] = 0;
     }
+    if (curRound + 1 >= answersRounds.length) {
+        drawFinish();
+        return;
+    }
     noAdd = false;
     ctx.clearRect(0, 0, 1920, 1080);
     var reset = document.getElementById("reset");
@@ -165,10 +169,7 @@ function start() {
 }
 var noAdd = false;
 function turnText(boxId) {
-    if (curRound >= answersRounds.length) {
-        drawFinish();
-    }
-    else if (!turnedBox[boxId]) {
+   if (!turnedBox[boxId]) {
         videos[boxId].play();
         setTimeout(function () {
             if (curTeam !== -1 && !noAdd) {
