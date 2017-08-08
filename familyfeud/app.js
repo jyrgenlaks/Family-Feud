@@ -175,6 +175,10 @@ function turnText(boxId) {
             if (curTeam !== -1 && !noAdd) {
                 curTeamScore[curTeam] += answersRounds[curRound][boxId][1];
             }
+            if (curTeam === 0 && _.isEqual(curWrongAnswer, [2,3]) || curTeam === 1 && _.isEqual(curWrongAnswer, [3,2])) {
+                pointsSteal();
+                noAdd = true;
+            }
             ctx.font = "200px Bebas Neue";
             ctx.fillStyle = "white";
             ctx.shadowColor = "black";
@@ -205,8 +209,12 @@ function wrongAnswerTeams() {
     console.log("Current team false: " + curTeam);
     curWrongAnswer[curTeam] += 1;
     wrongAnswer(curWrongAnswer[curTeam]);
-    if (curWrongAnswer[curTeam] === 3) {
+    if (curWrongAnswer[curTeam] === 3 && curWrongAnswer[Math.abs(curTeam - 1)] === 3) {
+        noAdd = true;
+    }
+    else if (curWrongAnswer[curTeam] === 3 && 3) {
         switchTeam();
+        curWrongAnswer[curTeam] = 2;
     }
 }
 function selectTeam(team) {
