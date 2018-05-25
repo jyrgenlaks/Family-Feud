@@ -235,9 +235,39 @@ function toggleMusic() {
     if (audioEl.paused) {
         audioEl.play();
     } else {
-        audioEl.pause();
-        audioEl.currentTime = 0;
+        var duration = 5000
+        fade(1,
+            0,
+            duration,
+            function() { return audioEl.volume; },
+            function(newVolume) { return audioEl.volume = newVolume; }
+            );
+        setTimeout(function() {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+        }, duration);
     }
+}
+
+function fade(start, end, duration, getter, setter) {
+    // var dt = (end-start) / duration * 10; // (*10) since we are gonna set it every 10 ms
+    
+    var t = start * duration;
+    var dt = 10;
+
+    var fader = setInterval(function () {
+        
+        var cur = getter();
+        next = t*t/(start*duration)/(start*duration);
+        if (t <= 0) {
+            setter(end);
+            clearInterval(fader);
+            return;
+        } 
+        console.log(next);
+        setter(next);
+        t -= dt;
+    }, dt);
 }
 
 window.onload = function () {
