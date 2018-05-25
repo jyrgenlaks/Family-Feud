@@ -217,15 +217,29 @@ function wrongAnswerTeams() {
         curWrongAnswer[curTeam] = 2;
     }
 }
+
 function selectTeam(team) {
     curTeam = team;
 }
+
 function switchTeam() {
     curTeam = Math.abs(curTeam - 1);
 }
+
 function unloadScrollBars() {
     document.documentElement.style.overflow = 'hidden';
 }
+
+function toggleMusic() {
+    audioEl = document.getElementById("theme");
+    if (audioEl.paused) {
+        audioEl.play();
+    } else {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+    }
+}
+
 window.onload = function () {
     unloadScrollBars();
     canvas = document.getElementById('vastus');
@@ -236,47 +250,50 @@ window.addEventListener('mousedown', function (event) {
     console.log("X: " + event.clientX + " Y: " + event.clientY);
 });
 window.addEventListener("keypress", function (event) {
-    if (event.charCode == 49) {
+    if (event.charCode == 49) { // 1
         turnText(0);
     }
-    else if (event.charCode == 50) {
+    else if (event.charCode == 50) { // 2
         turnText(1);
     }
-    else if (event.charCode == 51) {
+    else if (event.charCode == 51) { // 3
         turnText(2);
     }
-    else if (event.charCode == 52) {
+    else if (event.charCode == 52) { // 4
         turnText(3);
     }
-    else if (event.charCode == 53) {
+    else if (event.charCode == 53) { // 5
         wrongAnswer(1);
     }
-    else if (event.charCode == 54) {
+    else if (event.charCode == 54) { // 6
         wrongAnswer(2);
     }
-    else if (event.charCode == 55) {
+    else if (event.charCode == 55) { // 7
         wrongAnswer(3);
     }
-    else if (event.charCode == 106) {
+    else if (event.charCode == 106) { // j
         selectTeam(0);
     }
-    else if (event.charCode == 107) {
+    else if (event.charCode == 107) { // k
         selectTeam(1);
     }
-    else if (event.charCode == 114) {
+    else if (event.charCode == 114) { // r
         resetToNewRound();
     }
-    else if (event.charCode == 113) {
+    else if (event.charCode == 113) { // q
         wrongAnswerTeams();
     }
-    else if (event.charCode == 115) {
+    else if (event.charCode == 115) { // s
         start();
     }
-    else if (event.charCode == 105) {
+    else if (event.charCode == 105) { // i
         pointsSteal();
     }
-    else if (event.charCode == 48) {
+    else if (event.charCode == 48) { // 0
         noAdd = true;
+    } 
+    else if (event.charCode == 109) { // m
+        toggleMusic();
     }
     else {
         console.log(event.charCode);
