@@ -2,7 +2,7 @@
 var canvas;
 var ctx;
 var videos;
-var answersRounds = [
+var answersRounds1 = [
     [
         ['M. Reemann', 32],
         ['T. Jürgenstein', 25],
@@ -30,7 +30,7 @@ var answersRounds = [
         ['T. Pluum', 10]
     ]
 ];
-var answersRounds1 = [
+var answersRounds = [
     [
         ["JavaScript", 99],
         ["Java", 70],
