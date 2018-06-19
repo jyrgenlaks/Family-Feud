@@ -36,7 +36,13 @@ r | Starts new round
 q | Adds one to the mistake count of the *current selected team*, displays the correct amount of crosses and flips the current selected team when mistake count reaches 3
 i | Pointssteal - adds points of the opposite team to the *current selected team*. **Deprecated** - when a team quesses correctly after the opposite team makes 3 mistakes, this is automatically applied. 
 0 | Doesn't allow adding score this round. Use when all teams have exhausted all their options and you need to reveal the correct answers. **Deprecated** - when a team makes 3 mistakes and the other team also gives a wrong answer, this is automatically applied.
-M | Toggles the theme music
+
+---
+
+Button | Action
+ --- | ---
+m | Starts theme music from beginning
+
 ## [Example round](https://youtu.be/qCEDfP0quNU?t=6m5s)
 Timestamp | Button | Reason
 --- | --- | ---
