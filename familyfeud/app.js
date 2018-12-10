@@ -348,15 +348,6 @@ function handleKeyEvent(event){
     else if (event == 52) { // 4 - reveal answer #4
         turnText(3);
     }
-    else if (event == 53) { // 5 - DEPRECATED! 
-        wrongAnswer(1);
-    }
-    else if (event == 54) { // 6 - DEPRECATED! 
-        wrongAnswer(2);
-    }
-    else if (event == 55) { // 7 - DEPRECATED! 
-        wrongAnswer(3);
-    }
     else if (event == 106) { // j - select left team without sound
         selectTeam(0);
     }
@@ -382,9 +373,6 @@ function handleKeyEvent(event){
     else if (event == 115) { // s - start
         start();
     }
-    else if (event == 48) { // 0 - DEPRECATED! do not add score
-        noAdd = true;
-    }
     else if (event == 109) { // m
         toggleMusic();
     }
@@ -406,10 +394,10 @@ $(function() {
             $.post("control_panel/", { get_commands_since: latest_id })
             .done(function( data ) {
                 if(data === "NONE"){
-                    console.log("No data");
+                    //console.log("No data");
                 }else{
                     var results = data.split("|");
-                    console.log("Got command: " + results[0] + " and next id: " + results[1]);
+                    //console.log("Got command: " + results[0] + " and next id: " + results[1]);
                     if(results[0].length === 1){
                         latest_id = results[1];
                         var event = results[0].charCodeAt(0);
