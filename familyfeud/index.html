@@ -11,6 +11,7 @@
           src: url('fonts/BebasNeue.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
         }
     </style>
+    <script src="control_panel/jquery.js"></script>
     <script src="Scripts/lodash.min.js"></script>
     <script src="app.js"></script>
     <!-- <script src="questions.js"></script> -->
@@ -19,9 +20,8 @@
     <div id="mang">
         <div style="display=none">.</div>
         <audio class="aud hidden" id="theme" src="audio/ff-theme.mp3"></audio>
-
+        <audio class="aud hidden" id="buttonclick_sound" src="audio/buttonclick.mp3"></audio>
         <div id="vastused">
-            
             <!--<canvas class="vastus" id="c1" height="1080" width="1920"></canvas>
             <canvas class="vastus" id="c2" height="1080" width="1920"></canvas>
             <canvas class="vastus" id="c3" height="1080" width="1920"></canvas>
@@ -31,7 +31,7 @@
             <video class="vid anim hidden" id="anim2" src="vidaud/2.webm"></video>
             <video class="vid anim hidden" id="anim3" src="vidaud/3.webm"></video>
             <video class="vid anim hidden" id="anim4" src="vidaud/4.webm"></video>
-            
+
 
             <video class="vid cross hidden" id="cross1" src="vidaud/cross1.webm"></video>
             <video class="vid cross hidden" id="cross2" src="vidaud/cross2.webm"></video>

@@ -304,59 +304,24 @@ function wrongAnswerTeams() {
         curWrongAnswer[curTeam] = 2;
     }
 }
-
-function selectTeam(team) {
-    curTeam = team;
-}
-
-function switchTeam() {
-    curTeam = Math.abs(curTeam - 1);
-}
-
-function unloadScrollBars() {
-    document.documentElement.style.overflow = 'hidden';
-}
-
 function toggleMusic() {
     audioEl = document.getElementById("theme");
     if (audioEl.paused) {
         audioEl.play();
     } else {
-        var duration = 5000
-        fade(1,
-            0,
-            duration,
-            function() { return audioEl.volume; },
-            function(newVolume) { return audioEl.volume = newVolume; }
-            );
-        setTimeout(function() {
-            audioEl.pause();
-            audioEl.currentTime = 0;
-        }, duration);
+        audioEl.pause();
+        audioEl.currentTime = 0;
     }
 }
-
-function fade(start, end, duration, getter, setter) {
-    // var dt = (end-start) / duration * 10; // (*10) since we are gonna set it every 10 ms
-    
-    var t = start * duration;
-    var dt = 10;
-
-    var fader = setInterval(function () {
-        
-        var cur = getter();
-        next = t*t/(start*duration)/(start*duration);
-        if (t <= 0) {
-            setter(end);
-            clearInterval(fader);
-            return;
-        } 
-        console.log(next);
-        setter(next);
-        t -= dt;
-    }, dt);
+function selectTeam(team) {
+    curTeam = team;
 }
-
+function switchTeam() {
+    curTeam = Math.abs(curTeam - 1);
+}
+function unloadScrollBars() {
+    document.documentElement.style.overflow = 'hidden';
+}
 window.onload = function () {
     unloadScrollBars();
     canvas = document.getElementById('vastus');
@@ -367,55 +332,94 @@ window.addEventListener('mousedown', function (event) {
     console.log("X: " + event.clientX + " Y: " + event.clientY);
 });
 window.addEventListener("keypress", function (event) {
-    if (event.charCode == 49) { // 1
+    handleKeyEvent(event.charCode);
+});
+
+function handleKeyEvent(event){
+    if (event == 49) { // 1 - reveal answer #1
         turnText(0);
     }
-    else if (event.charCode == 50) { // 2
+    else if (event == 50) { // 2 - reveal answer #2
         turnText(1);
     }
-    else if (event.charCode == 51) { // 3
+    else if (event == 51) { // 3 - reveal answer #3
         turnText(2);
     }
-    else if (event.charCode == 52) { // 4
+    else if (event == 52) { // 4 - reveal answer #4
         turnText(3);
     }
-    else if (event.charCode == 53) { // 5
+    else if (event == 53) { // 5 - DEPRECATED! 
         wrongAnswer(1);
     }
-    else if (event.charCode == 54) { // 6
+    else if (event == 54) { // 6 - DEPRECATED! 
         wrongAnswer(2);
     }
-    else if (event.charCode == 55) { // 7
+    else if (event == 55) { // 7 - DEPRECATED! 
         wrongAnswer(3);
     }
-    else if (event.charCode == 106) { // j
+    else if (event == 106) { // j - select left team without sound
         selectTeam(0);
     }
-    else if (event.charCode == 107) { // k
+    else if (event == 107) { // k - select right team without sound
         selectTeam(1);
     }
-    else if (event.charCode == 114) { // r
+    else if (event == 117) { // u - select left team with sound
+        selectTeam(0);
+        console.log("left");
+        document.getElementById("buttonclick_sound").play();
+    }
+    else if (event == 105) { // i - select right team with sound
+        selectTeam(1);
+        console.log("right");
+        document.getElementById("buttonclick_sound").play();
+    }
+    else if (event == 114) { // r - reset to new round
         resetToNewRound();
     }
-    else if (event.charCode == 113) { // q
+    else if (event == 113) { // q - wrong answer
         wrongAnswerTeams();
     }
-    else if (event.charCode == 115) { // s
+    else if (event == 115) { // s - start
         start();
     }
-    else if (event.charCode == 105) { // i
-        pointsSteal();
-    }
-    else if (event.charCode == 48) { // 0
+    else if (event == 48) { // 0 - DEPRECATED! do not add score
         noAdd = true;
-    } 
-    else if (event.charCode == 109) { // m
+    }
+    else if (event == 109) { // m
         toggleMusic();
     }
-    else if (event.charCode == 109) { // m
-        toggleMusic();
+    else if (event == 33) { // !
+        location.reload()
     }
     else {
-        console.log(event.charCode);
+        console.log(event);
     }
+}
+
+$(function() {
+    var latest_id = 0;
+    $.post("control_panel/", { get_latest_id: 0 })
+    .done(function( data ) {
+        latest_id = parseInt(data);
+
+        setInterval(function(){
+            $.post("control_panel/", { get_commands_since: latest_id })
+            .done(function( data ) {
+                if(data === "NONE"){
+                    console.log("No data");
+                }else{
+                    var results = data.split("|");
+                    console.log("Got command: " + results[0] + " and next id: " + results[1]);
+                    if(results[0].length === 1){
+                        latest_id = results[1];
+                        var event = results[0].charCodeAt(0);
+                        console.log(results[0] + " -> " + event);
+                        handleKeyEvent(event);
+                    }else{
+                        console.log("got invalid result from server");
+                    }
+                }
+            });
+        }, 500);
+    });
 });
