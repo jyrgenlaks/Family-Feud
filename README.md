@@ -1,6 +1,12 @@
 # Family-Feud
 Project for playing family feud on a projector locally
 
+#NB! When using the web-based control panel
+When using the web-based control panel for controlling the game, it is highly advised to change the username and password for the control panel at the beginning of 
+>familyfeud/control_panel/index.php
+
+after setting up the database credentials.
+
 ## Keybindings
 
 Button | Action

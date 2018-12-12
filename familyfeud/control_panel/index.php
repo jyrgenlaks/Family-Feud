@@ -1,11 +1,39 @@
 <?php
+
+	/************************************************************************************************
+	*    ____                    __   _                                  _     _                    *
+	*   / ___|   ___    _ __    / _| (_)   __ _   _   _   _ __    __ _  | |_  (_)   ___    _ __     *
+	*  | |      / _ \  | '_ \  | |_  | |  / _` | | | | | | '__|  / _` | | __| | |  / _ \  | '_ \    *
+	*  | |___  | (_) | | | | | |  _| | | | (_| | | |_| | | |    | (_| | | |_  | | | (_) | | | | |   *
+	*   \____|  \___/  |_| |_| |_|   |_|  \__, |  \__,_| |_|     \__,_|  \__| |_|  \___/  |_| |_|   *
+	*                                     |___/                                                     *
+	************************************************************************************************/
+	$USERNAME = "admin";
+	$PASSWORD = "admin";
+
 	$servername	= "localhost";
 	$username	= "family_feud";
 	$password	= "SQLM7mCKtKmMWXR2";
 	$dbname		= "family_feud";
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
+	/**********************************************************
+	*      _        _                                         *
+	*     / \      (_)   __ _  __  __                         *
+	*    / _ \     | |  / _` | \ \/ /                         *
+	*   / ___ \    | | | (_| |  >  <                          *
+	*  /_/   \_\  _/ |  \__,_| /_/\_\                         *
+	*            |__/                                         *
+	*   _                      _                         _    *
+	*  | |__     __ _    ___  | | __   ___   _ __     __| |   *
+	*  | '_ \   / _` |  / __| | |/ /  / _ \ | '_ \   / _` |   *
+	*  | |_) | | (_| | | (__  |   <  |  __/ | | | | | (_| |   *
+	*  |_.__/   \__,_|  \___| |_|\_\  \___| |_| |_|  \__,_|   *
+	*                                                         *
+	**********************************************************/
+
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,12 +43,7 @@ ini_set('display_errors', 1);
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 
-	if(isset($_POST['btn'])){
-		$stmt = $conn->prepare("INSERT INTO commands (command) VALUES(?)");
-		$stmt->bind_param("s", $_POST['btn']);
-		$stmt->execute();
-		die("success");
-	}
+	
 	if(isset($_POST['get_latest_id'])){
 		$sql = "SELECT id FROM commands ORDER BY id DESC LIMIT 1";
 		$result = mysqli_query($conn, $sql);
@@ -46,6 +69,47 @@ ini_set('display_errors', 1);
 			die("NONE");
 		}
 	}
+
+	/***********************************
+	*   _   _                          *
+	*  | | | |  ___    ___   _ __      *
+	*  | | | | / __|  / _ \ | '__|     *
+	*  | |_| | \__ \ |  __/ | |        *
+	*   \___/  |___/  \___| |_|        *
+	*                   _     _        *
+	*    __ _   _   _  | |_  | |__     *
+	*   / _` | | | | | | __| | '_ \    *
+	*  | (_| | | |_| | | |_  | | | |   *
+	*   \__,_|  \__,_|  \__| |_| |_|   *
+	*                                  *
+	***********************************/
+
+
+	if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	    requireLogin();
+	} else {
+		if($_SERVER['PHP_AUTH_USER'] === $USERNAME  &&  $_SERVER['PHP_AUTH_PW'] === $PASSWORD){
+			//All OK, the user and passeord matched
+		}else{
+			requireLogin();
+		}
+	}
+
+	function requireLogin(){
+		header('WWW-Authenticate: Basic realm="Restricted area"');
+	    header('HTTP/1.0 401 Unauthorized');
+	    echo 'You need to log in in order to control the game!';
+	    exit;
+	}
+	
+	if(isset($_POST['btn'])){
+		$stmt = $conn->prepare("INSERT INTO commands (command) VALUES(?)");
+		$stmt->bind_param("s", $_POST['btn']);
+		$stmt->execute();
+		die("success");
+	}
+
+	
 
 ?><!DOCTYPE html>
 <html>
@@ -107,52 +171,34 @@ ini_set('display_errors', 1);
 	</table>
 </center>
 	<pre style="margin:0 auto;border: 1px solid black;width:100vw;height:300px;overflow-y: scroll">
-[//Nimeta üks Tartu Ülikooli hoone, kust leiab kõige rohkem teadust.
-    ['Füüsikum', 32],
-    ['Keemikum', 25],
-    ['Liivi 2', 8],
-    ['Tü raamatukogu', 7]
-], [//Nimeta üks amet, mida vanavanemad enamasti õppima soovitavad minna.
-    ['Aadrilaskja/tohtrionu', 16], // arst
-    ['Perfolindi asetaja/asendaja', 11], // IT
-    ['Insener', 10],
-    ['Põllumajandus/traktorist', 9]
-], [//Peale toidu, nimeta veel üks asi, millega saab tudengit loengusse meelitada.
-    ['Loengupunktid', 16],
-    ['Hea õppejõud', 11],
-    ['Meemid/huvitav loeng', 10],
-    ['KT/eksami vastused', 9]
-], [//Nimeta toit, mida tudengid tarbivad.
-    ['Šokolaad/snickers', 16],
-    ['(kiir)nuudlid', 11],
-    ['Pelmeenid', 10],
-    ['Purgisupp', 9]
-], [//Nimeta üks avalikult tuntud TÜ õppejõud, kes sinu arvates saab kõige rohkem armastuskirju.
-    ['Tarkpea', 16],
-    ['Karek Kolk', 11],
-    ['Mihhail Lotman', 10],
-    ['Mats Mikkor', 9]
-], [//Nimeta üks põhjus, miks inimene tahab füüsikuks saada.
-    ['Keskmine palk', 16], // raha
-    ['Masohhistlikult vastupidav', 11],
-    ['Teadmisrõõm', 10],
-    ['Vereliin - pereliin', 9]
-], [//Nimeta üks asi, mille üle varas ei tahaks üllatuda, kui ta Füüsika Instituuti sisse murrab?
-    ['Kalev Tarkpea ootab koridoris', 16],
-    ['Tudengeid õppimas', 11],
-    ['STEM kaalub samapalju kui bemm', 10],
-    [' - ', 9]
-], [//Nimeta midagi, mida eeldatakse, et 25-aastane inimene on juba saavutanud.
-    ['Pesast välja hüpanud', 16],//Kodust välja kolinud
-    ['Elukaaslane/koduloom', 11],
-    ['Vumm-vumm', 10],//Auto
-    [' - ', 9]
-], [//Nimeta miski, mis paneb õppejõude kõige rohkem nutma kui nad eksamit parandavad.
-    ['Magistrisse minna', 16],
-    ['-', 11],
-    ['-', 10],
-    [' - ', 9]
-]
+gameBlock[3] = [
+    [// Nimeta levinuim Linuxi käsurea käsk:
+        ['ls', 40],
+        ['cd', 30],
+        ['mv', 20],
+        ['apt', 10]
+    ], [// Nimeta võimalikult turvaline WiFi krüpteeringustandard
+        ['WPA3', 40],
+        ['WPA2', 30],
+        ['WPA', 20],
+        ['WEP', 10]
+    ], [// Nimeta üks kõige levinuimatest kettaseadmeühendusstandarditest
+        ['SATA', 40],
+        ['M.2', 30],
+        ['PATA', 20],
+        ['SCSI', 10]
+    ], [// Nimeta üks levinumatest Android'i versioonidest
+        ['7.0/7.1 Nougat', 40],
+        ['6.0 Marshmallow', 30],
+        ['5.1/5.0 Lollipop', 20],
+        ['8.1/8.0 Oreo', 10]
+    ], [// Nimeta üks operatsioonisüsteem millega saab veebilehti kuvada (based on https://en.wikipedia.org/wiki/Usage_share_of_operating_systems)
+        ['Android', 40],
+        ['Windows', 36],
+        ['Apple\'i iOS', 14],
+        ['Apple\'i macOS', 6]
+    ]
+];
 	</pre>
 	<button class="w3-button w3-red" id="refresh-page">Refresh page</button>
 </body>
